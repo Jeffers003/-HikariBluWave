@@ -53,7 +53,21 @@ export async function gerarAccessToken(code) {
   };
 
   params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
+  console.log("PARAMS ENVIADOS ALIEXPRESS:");
+  console.log(params);
 
+  console.log("STRING SIGN:");
+  console.log(
+    process.env.ALIEXPRESS_APP_SECRET +
+      Object.keys(params)
+        .sort()
+        .map((key) => key + params[key])
+        .join("") +
+      process.env.ALIEXPRESS_APP_SECRET,
+  );
+
+  console.log("SIGN:");
+  console.log(params.sign);
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
     qs.stringify(params),
