@@ -48,18 +48,16 @@ export async function gerarAccessToken(code) {
     app_key: process.env.ALIEXPRESS_APP_KEY,
     code,
     timestamp: Date.now(),
-    sign_method: "sha256",
+    sign_method: "md5",
   };
 
   params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
 
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
-    params,
+    null,
     {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      params,
     },
   );
 
