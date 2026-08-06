@@ -47,6 +47,7 @@ export async function buscarProdutosAliExpress(keyword) {
 export async function gerarAccessToken(code) {
   const params = {
     app_key: process.env.ALIEXPRESS_APP_KEY,
+    method: "auth.token.create",
     code,
     timestamp: Math.floor(Date.now() / 1000) + "000",
     sign_method: "sha256",
