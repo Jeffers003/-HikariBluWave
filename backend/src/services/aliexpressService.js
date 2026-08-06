@@ -43,9 +43,7 @@ export async function buscarProdutosAliExpress(keyword) {
 }
 
 export async function gerarAccessToken(code) {
-  console.log("APP KEY:", process.env.ALIEXPRESS_APP_KEY);
-  console.log("SECRET EXISTE:", !!process.env.ALIEXPRESS_APP_SECRET);
-  console.log("CODE:", code);
+  const timestamp = Date.now();
 
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
@@ -53,6 +51,8 @@ export async function gerarAccessToken(code) {
       app_key: process.env.ALIEXPRESS_APP_KEY,
       app_secret: process.env.ALIEXPRESS_APP_SECRET,
       code,
+      timestamp,
+      sign_method: "sha256",
     },
   );
 
