@@ -26,14 +26,10 @@ const app = express();
 
 app.use(cors());
 
-app.use(express.json());
-
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(express.json());
-
-app.use("/uploads", express.static("uploads"));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Banco
