@@ -5,16 +5,14 @@ export function gerarAssinatura(params, secret) {
     .filter((key) => key !== "sign")
     .sort();
 
-  let signString = secret;
+  let signString = "";
 
   for (const key of keys) {
     signString += key + params[key];
   }
 
-  signString += secret;
-
   return crypto
-    .createHash("sha256")
+    .createHmac("sha256", secret)
     .update(signString, "utf8")
     .digest("hex")
     .toUpperCase();
