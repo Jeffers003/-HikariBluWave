@@ -1,5 +1,6 @@
 import axios from "axios";
 import { chamarAliExpress } from "./aliexpressClient.js";
+import { gerarAssinatura } from "../utils/aliexpressSign.js";
 
 export async function buscarCategoriasAliExpress() {
   return await chamarAliExpress("aliexpress.ds.category.get");
@@ -43,16 +44,20 @@ export async function buscarProdutosAliExpress(keyword) {
 }
 
 export async function gerarAccessToken(code) {
-  const timestamp = Date.now();
+  const params = {
+    app_key: process.env.ALIEXPRESS_APP_KEY,
+    code,
+    timestamp: Date.now(),
+    sign_method: "sha256",
+  };
+
+  params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
 
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
+    null,
     {
-      app_key: process.env.ALIEXPRESS_APP_KEY,
-      app_secret: process.env.ALIEXPRESS_APP_SECRET,
-      code,
-      timestamp,
-      sign_method: "sha256",
+      params,
     },
   );
 

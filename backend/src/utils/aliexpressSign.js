@@ -1,7 +1,9 @@
 import crypto from "crypto";
 
 export function gerarAssinatura(params, secret) {
-  const keys = Object.keys(params).sort();
+  const keys = Object.keys(params)
+    .filter((key) => key !== "sign")
+    .sort();
 
   let signString = secret;
 
@@ -14,7 +16,7 @@ export function gerarAssinatura(params, secret) {
   signString += secret;
 
   return crypto
-    .createHash("md5")
+    .createHash("sha256")
     .update(signString, "utf8")
     .digest("hex")
     .toUpperCase();

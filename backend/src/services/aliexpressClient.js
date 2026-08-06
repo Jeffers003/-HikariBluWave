@@ -10,7 +10,7 @@ export async function chamarAliExpress(method, params = {}) {
 
     method,
 
-    sign_method: "md5",
+    sign_method: "sha256",
 
     timestamp: Date.now(),
 
