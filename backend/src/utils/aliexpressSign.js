@@ -1,19 +1,23 @@
 import crypto from "crypto";
 
-export function gerarAssinatura(params, secret) {
+export function gerarAssinatura(params, secret, api = "") {
   const keys = Object.keys(params)
     .filter((key) => key !== "sign")
     .sort();
 
-  let signString = "";
+  let parametersString = "";
 
   for (const key of keys) {
-    signString += key + params[key];
+    parametersString += key + params[key];
+  }
+
+  if (api.includes("/")) {
+    parametersString = api + parametersString;
   }
 
   return crypto
     .createHmac("sha256", secret)
-    .update(signString, "utf8")
+    .update(parametersString, "utf8")
     .digest("hex")
     .toUpperCase();
 }
