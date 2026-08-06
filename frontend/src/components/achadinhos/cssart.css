@@ -1,0 +1,17 @@
+.Cardbody {
+  background-image: url(../../assets/images/chest.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+}
+.CardItem img {
+  transition: transform 2s ease;
+}
+.CardItem:hover img {
+  transform: scale(2);
+}
+.HeroSection {
+  background-image: url(../../assets/images/bg-achadinhos.png);
+}

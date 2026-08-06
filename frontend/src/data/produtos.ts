@@ -1,0 +1,42 @@
+import type { Produto } from "@/types/produto";
+
+export const produtosMock: Produto[] = [
+  {
+    _id: "1",
+    titulo: "Teclado Mecânico Gamer RGB",
+    slug: "teclado-mecanico-gamer-rgb",
+    imagem: "https://placehold.co/500x500",
+    marketplace: "AliExpress",
+    preco: 189.9,
+    precoAntigo: 249.9,
+    avaliacao: 4.8,
+    vendas: 2300,
+    linkAfiliado: "#",
+    destaque: true,
+  },
+  {
+    _id: "2",
+    titulo: "Mouse Gamer Wireless RGB",
+    slug: "mouse-gamer-wireless-rgb",
+    imagem: "https://placehold.co/500x500",
+    marketplace: "AliExpress",
+    preco: 89.9,
+    precoAntigo: 129.9,
+    avaliacao: 4.7,
+    vendas: 1500,
+    linkAfiliado: "#",
+  },
+  {
+    _id: "3",
+    titulo: "Headset Gamer Surround 7.1",
+    slug: "headset-gamer-surround",
+    imagem: "https://placehold.co/500x500",
+    marketplace: "AliExpress",
+    preco: 159.9,
+    precoAntigo: 219.9,
+    avaliacao: 4.9,
+    vendas: 3400,
+    linkAfiliado: "#",
+    destaque: true,
+  },
+];

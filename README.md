@@ -1,6 +1,6 @@
 # 🌊 HikariBluWave
 
-Uma plataforma de e-commerce moderna desenvolvida com **React**, **Vite** e **TypeScript**, focada em desempenho, design responsivo e uma experiência de compra intuitiva.
+API REST para e-commerce desenvolvida com Node.js, Express e MongoDB, incluindo autenticação JWT, controle de acesso por perfis, gerenciamento de produtos, categorias, pedidos, estoque e dashboard administrativo com métricas de vendas.
 
 ## ✨ Funcionalidades
 

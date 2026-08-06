@@ -1,0 +1,37 @@
+nav {
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 1rem;
+  justify-content: space-around;
+}
+ul {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+header {
+  display: flex;
+  background-color: #0103087c;
+  box-shadow: 0px 3px 4px rgba(4, 73, 209, 0.374);
+  backdrop-filter: saturate(180%) blur(9px) contrast(100%) brightness(100%);
+  justify-content: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 16px 64px;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+.header-icons {
+  display: flex;
+  gap: 1rem;
+}
+footer {
+  background-color: #010308;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
