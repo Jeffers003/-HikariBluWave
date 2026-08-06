@@ -43,17 +43,16 @@ export async function buscarProdutosAliExpress(keyword) {
 }
 
 export async function gerarAccessToken(code) {
+  console.log("APP KEY:", process.env.ALIEXPRESS_APP_KEY);
+  console.log("SECRET EXISTE:", !!process.env.ALIEXPRESS_APP_SECRET);
+  console.log("CODE:", code);
+
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
-    null,
     {
-      params: {
-        grant_type: "authorization_code",
-        code,
-        client_id: process.env.ALIEXPRESS_APP_KEY,
-        client_secret: process.env.ALIEXPRESS_APP_SECRET,
-        redirect_uri: process.env.ALIEXPRESS_CALLBACK_URL,
-      },
+      app_key: process.env.ALIEXPRESS_APP_KEY,
+      app_secret: process.env.ALIEXPRESS_APP_SECRET,
+      code,
     },
   );
 
