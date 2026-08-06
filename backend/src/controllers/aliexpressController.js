@@ -67,13 +67,10 @@ export async function callbackAliExpress(req, res) {
 
     const token = await gerarAccessToken(code);
 
-    res.json({
-      sucesso: true,
-      token,
-    });
+    res.json(token);
   } catch (error) {
     res.status(500).json({
-      erro: error.message,
+      erro: error.response?.data || error.message,
     });
   }
 }

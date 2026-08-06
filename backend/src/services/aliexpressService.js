@@ -1,23 +1,9 @@
+import axios from "axios";
 import { chamarAliExpress } from "./aliexpressClient.js";
+
 export async function buscarCategoriasAliExpress() {
   return await chamarAliExpress("aliexpress.ds.category.get");
 }
-export async function buscarProdutoAliExpress(url) {
-  return {
-    sucesso: true,
-    mensagem: "Produto recebido",
-    url,
-  };
-}
-
-export async function buscarProdutosAliExpress(keyword) {
-  return await chamarAliExpress("aliexpress.ds.product.get", {
-    keywords: keyword,
-    page_no: 1,
-    page_size: 20,
-  });
-}
-
 export async function importarCategoriasAliExpress() {
   const resposta = await buscarCategoriasAliExpress();
 
@@ -39,10 +25,37 @@ export async function importarCategoriasAliExpress() {
     externalId: categoria.category_id,
   }));
 }
-export async function gerarAccessToken(code) {
-  const resposta = await chamarAliExpress("aliexpress.oauth.token.create", {
-    code,
-  });
 
-  return resposta;
+export async function buscarProdutoAliExpress(url) {
+  return {
+    sucesso: true,
+    mensagem: "Produto recebido",
+    url,
+  };
+}
+
+export async function buscarProdutosAliExpress(keyword) {
+  return await chamarAliExpress("aliexpress.ds.product.get", {
+    keywords: keyword,
+    page_no: 1,
+    page_size: 20,
+  });
+}
+
+export async function gerarAccessToken(code) {
+  const resposta = await axios.post(
+    "https://api-sg.aliexpress.com/rest/auth/token/create",
+    null,
+    {
+      params: {
+        grant_type: "authorization_code",
+        code,
+        client_id: process.env.ALIEXPRESS_APP_KEY,
+        client_secret: process.env.ALIEXPRESS_APP_SECRET,
+        redirect_uri: process.env.ALIEXPRESS_CALLBACK_URL,
+      },
+    },
+  );
+
+  return resposta.data;
 }
