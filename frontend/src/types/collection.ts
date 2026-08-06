@@ -1,4 +1,5 @@
 export interface Collection {
+  _id: string;
   nome: string;
   id: string;
   titulo: string;

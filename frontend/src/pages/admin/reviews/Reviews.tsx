@@ -41,12 +41,12 @@ export default function Reviews() {
   return (
     <>
       <AdminPageHeader title="Reviews">
-        <Button asChild>
-          <Link to="/admin/reviews/novo">
+        <Link to="/admin/reviews/novo">
+          <Button>
             <Plus className="w-4 h-4 mr-2" />
             Novo Review
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </AdminPageHeader>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -86,18 +86,17 @@ export default function Reviews() {
             </p>
 
             <div className="flex gap-2 mt-5">
-              <StatusBadge status={review.ativo ? "Ativo" : "Inativo"} />
+              <StatusBadge ativo={review.ativo} />
 
-              {review.destaque && <StatusBadge status="Destaque" />}
+              {review.destaque && <StatusBadge ativo={true} />}
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
-              <Button size="icon" variant="outline" asChild>
-                <Link to={`/admin/reviews/${review._id}`}>
+              <Link to={`/admin/reviews/${review._id}`}>
+                <Button size="icon" variant="outline">
                   <Pencil size={18} />
-                </Link>
-              </Button>
-
+                </Button>
+              </Link>
               <Button
                 size="icon"
                 variant="destructive"
@@ -110,11 +109,15 @@ export default function Reviews() {
         ))}
       </div>
 
-      <ConfirmDeleteDialog
-        open={!!reviewExcluir}
-        onOpenChange={(open) => !open && setReviewExcluir(null)}
-        onConfirm={handleExcluir}
-      />
+      {reviewExcluir && (
+        <ConfirmDeleteDialog
+          onConfirm={handleExcluir}
+          title="Confirmar exclusão"
+          description="Essa ação não poderá ser desfeita."
+        >
+          <button style={{ display: "none" }} />
+        </ConfirmDeleteDialog>
+      )}
     </>
   );
 }
