@@ -14,7 +14,7 @@ export function gerarAssinatura(params, secret) {
   signString += secret;
 
   return crypto
-    .createHash("md5")
+    .createHash("sha256")
     .update(signString, "utf8")
     .digest("hex")
     .toUpperCase();
