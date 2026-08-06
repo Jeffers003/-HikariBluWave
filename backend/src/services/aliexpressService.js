@@ -55,9 +55,11 @@ export async function gerarAccessToken(code) {
 
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/create",
-    null,
+    params,
     {
-      params,
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
   );
 
