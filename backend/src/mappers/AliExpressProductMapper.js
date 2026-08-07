@@ -195,27 +195,30 @@ export function mapProductDetail(productResponse) {
  * @param {string} categoriaLocalId - _id da categoria já mapeada no seu catálogo
  */
 export function toHikariBluWaveProduct(detalhe, categoriaLocalId = null) {
-  const precoBase = detalhe.variacoes?.[0]?.precoComDesconto
-    ?? detalhe.variacoes?.[0]?.preco
-    ?? null;
+  const primeiroSku = detalhe.variacoes?.[0];
+
+  // O schema do Produto só tem uma "imagem" (string), não um array —
+  // usamos a primeira imagem do produto como capa.
+  const imagemCapa = detalhe.imagens?.[0] || null;
+
+  // Preço: se não tiver preço com desconto, cai pro preço cheio da 1ª SKU.
+  const preco = primeiroSku?.precoComDesconto ?? primeiroSku?.preco ?? null;
+
+  // Estoque: soma o estoque de todas as variações (ou 0 se vier null/undefined).
+  const estoqueTotal = (detalhe.variacoes || []).reduce(
+    (soma, sku) => soma + (Number(sku.estoque) || 0),
+    0,
+  );
 
   return {
     nome: detalhe.nome,
     descricao: detalhe.descricaoHtml,
-    imagens: detalhe.imagens,
-    preco: precoBase,
-    moeda: detalhe.moeda,
+    preco,
     categoria: categoriaLocalId,
-    variacoes: detalhe.variacoes,
-    fornecedor: {
-      nome: 'aliexpress',
-      productIdExterno: detalhe.externalId,
-      loja: detalhe.loja,
-    },
-    avaliacao: detalhe.avaliacaoMedia,
-    totalAvaliacoes: detalhe.totalAvaliacoes,
+    imagem: imagemCapa,
+    estoque: estoqueTotal,
     ativo: detalhe.status === 'onSelling' || detalhe.status === 'ACTIVE',
-    importadoEm: detalhe.importadoEm,
+    productIdExterno: detalhe.externalId,
   };
 }
 

@@ -37,6 +37,16 @@ const produtoSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    // NOVO: guarda o product_id da AliExpress quando o produto foi
+    // importado por lá. Fica vazio/undefined pra produtos cadastrados
+    // manualmente. "sparse: true" faz o índice único ignorar documentos
+    // sem esse campo, em vez de dar erro de duplicata em todos eles.
+    productIdExterno: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   {
     timestamps: true,
