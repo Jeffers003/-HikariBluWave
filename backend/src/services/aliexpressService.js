@@ -8,29 +8,34 @@ const TOKEN_URL =
   "https://api-sg.aliexpress.com/rest/auth/token/security/create";
 
 export async function gerarAccessToken(code) {
-  try {
-    const params = {
-      app_key: process.env.ALIEXPRESS_APP_KEY,
+  const params = {
+    app_key: process.env.ALIEXPRESS_APP_KEY,
 
-      code,
+    code: code,
 
-      timestamp: Date.now(),
+    timestamp: Date.now(),
 
-      sign_method: "sha256",
-    };
+    sign_method: "sha256",
+  };
 
-    params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
+  params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
 
-    const resposta = await axios.post(TOKEN_URL, qs.stringify(params), {
+  console.log("PARAMS TOKEN:");
+  console.log(params);
+
+  const resposta = await axios.post(
+    "https://api-sg.aliexpress.com/rest/auth/token/security/create",
+
+    qs.stringify(params),
+
+    {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
       },
-    });
+    },
+  );
 
-    return resposta.data;
-  } catch (error) {
-    throw error.response?.data || error.message;
-  }
+  return resposta.data;
 }
 
 export async function buscarCategoriasAliExpress() {

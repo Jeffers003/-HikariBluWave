@@ -1,7 +1,9 @@
 import crypto from "crypto";
 
 export function gerarAssinatura(params, secret) {
-  const keys = Object.keys(params).sort();
+  const keys = Object.keys(params)
+    .filter((key) => key !== "sign")
+    .sort();
 
   let signString = "";
 
