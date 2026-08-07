@@ -5,6 +5,7 @@ import {
   listarCategorias,
   iniciarAuthAliExpress,
   callbackAliExpress,
+  listarProdutosAliExpress,
 } from "../controllers/aliexpressController.js";
 
 const router = express.Router();
