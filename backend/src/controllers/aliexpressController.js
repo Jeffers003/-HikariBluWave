@@ -1,3 +1,4 @@
+// src/controllers/aliexpressController.js
 import {
   buscarProdutoAliExpress,
   buscarCategoriasAliExpress,
@@ -5,10 +6,15 @@ import {
   gerarAccessToken,
 } from "../services/aliexpressService.js";
 import AliExpressToken from "../models/AliExpressToken.js";
+import {
+  mapProductDetail,
+  toHikariBluWaveProduct,
+} from "../mappers/AliExpressProductMapper.js"; // ajuste o caminho se salvou em outro lugar
+import ProdutoModel from "../models/Produto.js"; // ajuste pro nome/caminho real do seu model
 
 export async function importarProduto(req, res) {
   try {
-    const { url } = req.body;
+    const { url, categoriaId = null } = req.body;
 
     if (!url) {
       return res.status(400).json({
@@ -16,12 +22,27 @@ export async function importarProduto(req, res) {
       });
     }
 
-    const produto = await buscarProdutoAliExpress(url);
+    const raw = await buscarProdutoAliExpress(url);
+    const detalhe = mapProductDetail(raw);
+    const produto = toHikariBluWaveProduct(detalhe, categoriaId);
 
-    res.json(produto);
+    const existente = await ProdutoModel.findOne({
+      "fornecedor.productIdExterno": detalhe.externalId,
+    });
+
+    let salvo;
+    if (existente) {
+      Object.assign(existente, produto);
+      salvo = await existente.save();
+    } else {
+      salvo = await ProdutoModel.create(produto);
+    }
+
+    res.json({ sucesso: true, mensagem: "Produto importado com sucesso.", produto: salvo });
   } catch (error) {
+    console.error("[aliexpress] erro ao importar produto:", error?.response?.data || error.message);
     res.status(500).json({
-      erro: error.message,
+      erro: error?.response?.data || error.message,
     });
   }
 }
@@ -84,7 +105,7 @@ export async function callbackAliExpress(req, res) {
     });
   } catch (error) {
     res.status(500).json({
-      erro: error,
+      erro: error.message,
     });
   }
 }

@@ -1,38 +1,22 @@
-import mongoose from "mongoose";
+// src/services/aliexpressToken.js
+//
+// Extraído de aliexpressService.js para quebrar a dependência circular:
+// antes, aliexpressService.js <-> aliexpressClient.js se importavam
+// mutuamente. Agora os dois importam apenas daqui.
 
-const aliExpressTokenSchema = new mongoose.Schema(
-  {
-    accessToken: {
-      type: String,
-      required: true,
-    },
+import AliExpressToken from "../models/AliExpressToken.js";
 
-    refreshToken: {
-      type: String,
-      required: true,
-    },
+export async function obterAccessToken() {
+  const token = await AliExpressToken.findOne();
 
-    expireTime: {
-      type: Number,
-      required: true,
-    },
+  if (!token) {
+    throw new Error("Nenhum token do AliExpress encontrado.");
+  }
 
-    refreshExpireTime: {
-      type: Number,
-      required: true,
-    },
+  // TODO: checar token.expireTime aqui e renovar automaticamente
+  // com refresh_token quando estiver perto de expirar. Por enquanto
+  // isso não existe e a chamada vai falhar com token expirado depois
+  // do tempo de expires_in.
 
-    sellerId: String,
-
-    userId: String,
-
-    locale: String,
-
-    sp: String,
-  },
-  {
-    timestamps: true,
-  },
-);
-
-export default mongoose.model("AliExpressToken", aliExpressTokenSchema);
+  return token.accessToken;
+}

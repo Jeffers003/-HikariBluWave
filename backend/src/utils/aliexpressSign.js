@@ -1,8 +1,13 @@
+// src/utils/aliexpressSign.js
 import crypto from "crypto";
 
 export function gerarAssinatura(params, secret, apiPath = "") {
   const keys = Object.keys(params)
     .filter((k) => k !== "sign")
+    // espelha IopUtils.areNotEmpty() do SDK Java: pula chave/valor
+    // nulo, undefined ou string vazia — senão a assinatura pode
+    // divergir da calculada pelo servidor da AliExpress.
+    .filter((k) => params[k] !== null && params[k] !== undefined && params[k] !== "")
     .sort();
 
   let signString = apiPath;
