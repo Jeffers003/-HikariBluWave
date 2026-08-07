@@ -4,6 +4,7 @@ import {
   buscarProdutosAliExpress,
   gerarAccessToken,
 } from "../services/aliexpressService.js";
+import AliExpressToken from "../models/AliExpressToken.js";
 
 export async function importarProduto(req, res) {
   try {
@@ -59,7 +60,28 @@ export async function callbackAliExpress(req, res) {
 
     const token = await gerarAccessToken(code);
 
-    res.json(token);
+    await AliExpressToken.findOneAndUpdate(
+      {},
+      {
+        accessToken: token.access_token,
+        refreshToken: token.refresh_token,
+        expireTime: token.expire_time,
+        refreshExpireTime: token.refresh_token_valid_time,
+        sellerId: token.seller_id,
+        userId: token.user_id,
+        locale: token.locale,
+        sp: token.sp,
+      },
+      {
+        upsert: true,
+        new: true,
+      },
+    );
+
+    res.json({
+      sucesso: true,
+      mensagem: "Token salvo com sucesso.",
+    });
   } catch (error) {
     res.status(500).json({
       erro: error,

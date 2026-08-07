@@ -3,6 +3,7 @@ import qs from "qs";
 
 import { chamarAliExpress } from "./aliexpressClient.js";
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
+import AliExpressToken from "../models/AliExpressToken.js";
 
 const TOKEN_URL =
   "https://api-sg.aliexpress.com/rest/auth/token/security/create";
@@ -46,6 +47,16 @@ export async function gerarAccessToken(code) {
   );
 
   return resposta.data;
+}
+
+export async function obterAccessToken() {
+  const token = await AliExpressToken.findOne();
+
+  if (!token) {
+    throw new Error("Nenhum token do AliExpress encontrado.");
+  }
+
+  return token.accessToken;
 }
 
 export async function buscarCategoriasAliExpress() {
