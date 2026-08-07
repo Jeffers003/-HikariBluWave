@@ -47,21 +47,26 @@ export async function buscarProdutosAliExpress(keyword) {
 export async function gerarAccessToken(code) {
   const params = {
     app_key: process.env.ALIEXPRESS_APP_KEY,
-    method: "auth.token.create",
+    method: "/auth/token/security/create",
     code,
-    timestamp: Math.floor(Date.now() / 1000) + "000",
-    sign_method: "sha256",
+    timestamp: Math.floor(Date.now() / 1000),
+    sign_method: "HMAC-SHA256",
   };
 
   params.sign = gerarAssinatura(
     params,
     process.env.ALIEXPRESS_APP_SECRET,
-    "/rest/auth/token/create",
+    params.method,
   );
 
   const resposta = await axios.post(
-    "https://api-sg.aliexpress.com/rest/auth/token/create",
-    params,
+    "https://api-sg.aliexpress.com/rest/auth/token/security/create",
+    qs.stringify(params),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    },
   );
 
   return resposta.data;

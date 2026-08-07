@@ -5,6 +5,7 @@ import {
   importarCategoriasAliExpress,
 } from "../services/aliexpressService.js";
 import { gerarAccessToken } from "../services/aliexpressService.js";
+
 export async function importarProduto(req, res) {
   try {
     const { url } = req.body;
@@ -90,6 +91,7 @@ export async function importarCategorias(req, res) {
     });
   }
 }
+
 export async function listarProdutosAliExpress(req, res) {
   try {
     const { keyword } = req.query;
