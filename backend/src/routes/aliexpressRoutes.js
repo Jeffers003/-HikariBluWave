@@ -5,8 +5,6 @@ import {
   listarCategorias,
   iniciarAuthAliExpress,
   callbackAliExpress,
-  importarCategorias,
-  listarProdutosAliExpress,
 } from "../controllers/aliexpressController.js";
 
 const router = express.Router();
@@ -19,8 +17,24 @@ router.get("/auth", iniciarAuthAliExpress);
 
 router.get("/produtos", listarProdutosAliExpress);
 
-router.get("/callback", callbackAliExpress);
+router.get("/callback", async (req, res) => {
+  try {
+    const { code } = req.query;
 
-router.get("/importar-categorias", importarCategorias);
+    if (!code) {
+      return res.status(400).json({
+        mensagem: "Código de autorização é obrigatório",
+      });
+    }
+
+    const token = await gerarAccessToken(code);
+
+    res.json(token);
+  } catch (error) {
+    res.status(500).json({
+      erro: error.response?.data || error.message,
+    });
+  }
+});
 
 export default router;
