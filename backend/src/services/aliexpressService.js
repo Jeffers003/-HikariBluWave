@@ -64,11 +64,13 @@ export async function buscarCategoriasAliExpress() {
 }
 
 export async function buscarProdutosAliExpress(keyword) {
-  return chamarAliExpress("aliexpress.ds.product.get", {
+  return chamarAliExpress("aliexpress.ds.product.wholesale.get", {
     keywords: keyword,
     ship_to_country: "BR",
     page_no: 1,
     page_size: 20,
+    target_currency: "BRL",
+    target_language: "PT",
   });
 }
 
