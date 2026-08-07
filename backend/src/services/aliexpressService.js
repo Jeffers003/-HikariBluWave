@@ -3,6 +3,10 @@ import qs from "qs";
 import { chamarAliExpress } from "./aliexpressClient.js";
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
 import aliexpressConfig from "../config/aliexpress.js";
+
+const BASE_URL =
+  "https://api-sg.aliexpress.com/rest/auth/token/security/create";
+
 export async function buscarCategoriasAliExpress() {
   return await chamarAliExpress("aliexpress.ds.category.get");
 }
@@ -51,7 +55,7 @@ export async function gerarAccessToken(code) {
       method: "/auth/token/security/create",
       code,
       timestamp: Math.floor(Date.now() / 1000),
-      sign_method: "sha256",
+      sign_method: "HMAC-SHA256",
     };
 
     params.sign = aliexpressConfig.gerarAssinatura(
