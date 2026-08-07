@@ -4,7 +4,7 @@
 // antes, aliexpressService.js <-> aliexpressClient.js se importavam
 // mutuamente. Agora os dois importam apenas daqui.
 
-import AliExpressToken from "../models/AliExpressToken.js";
+import AliExpressToken from "./aliexpressToken.js";
 
 export async function obterAccessToken() {
   const token = await AliExpressToken.findOne();

@@ -5,7 +5,7 @@ import {
   buscarProdutosAliExpress,
   gerarAccessToken,
 } from "../services/aliexpressService.js";
-import AliExpressToken from "../models/AliExpressToken.js";
+import AliExpressToken from "../models/aliexpressToken.js";
 import {
   mapProductDetail,
   toHikariBluWaveProduct,
@@ -38,9 +38,16 @@ export async function importarProduto(req, res) {
       salvo = await ProdutoModel.create(produto);
     }
 
-    res.json({ sucesso: true, mensagem: "Produto importado com sucesso.", produto: salvo });
+    res.json({
+      sucesso: true,
+      mensagem: "Produto importado com sucesso.",
+      produto: salvo,
+    });
   } catch (error) {
-    console.error("[aliexpress] erro ao importar produto:", error?.response?.data || error.message);
+    console.error(
+      "[aliexpress] erro ao importar produto:",
+      error?.response?.data || error.message,
+    );
     res.status(500).json({
       erro: error?.response?.data || error.message,
     });

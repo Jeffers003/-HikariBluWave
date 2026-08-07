@@ -5,9 +5,10 @@ import qs from "qs";
 import { chamarAliExpress } from "./aliexpressClient.js";
 import { obterAccessToken } from "./aliexpressToken.js"; // re-exportado abaixo por compatibilidade
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
-import AliExpressToken from "../models/AliExpressToken.js";
+import AliExpressToken from "../models/aliexpressToken.js";
 
-const TOKEN_URL = "https://api-sg.aliexpress.com/rest/auth/token/security/create";
+const TOKEN_URL =
+  "https://api-sg.aliexpress.com/rest/auth/token/security/create";
 
 export async function gerarAccessToken(code) {
   const params = {
