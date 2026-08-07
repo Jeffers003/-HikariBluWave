@@ -18,8 +18,11 @@ export async function gerarAccessToken(code) {
     sign_method: "sha256",
   };
 
-  params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
-
+  params.sign = gerarAssinatura(
+    params,
+    process.env.ALIEXPRESS_APP_SECRET,
+    "/auth/token/security/create",
+  );
   console.log("PARAMS TOKEN:");
   console.log(params);
 

@@ -1,15 +1,18 @@
 import crypto from "crypto";
 
-export function gerarAssinatura(params, secret) {
+export function gerarAssinatura(params, secret, apiPath) {
   const keys = Object.keys(params)
     .filter((key) => key !== "sign")
     .sort();
 
-  let signString = "";
+  let signString = apiPath;
 
   for (const key of keys) {
     signString += key + params[key];
   }
+
+  console.log("STRING ASSINATURA:");
+  console.log(signString);
 
   return crypto
     .createHmac("sha256", secret)
