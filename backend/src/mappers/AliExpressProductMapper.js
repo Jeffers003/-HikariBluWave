@@ -71,10 +71,32 @@ export function mapSearchResponse(searchResponse) {
 //    Usado quando o admin clica "Importar do AliExpress".
 // ---------------------------------------------------------------------------
 
+/**
+ * A AliExpress (protocolo TOP) é inconsistente na hora de serializar listas
+ * em JSON: às vezes vem array puro, às vezes vem embrulhada num objeto com
+ * uma chave extra (ex: { selection_search_product: [...] }), e às vezes,
+ * quando só tem 1 item, vem o objeto sozinho, sem array nenhum.
+ * Essa função normaliza os três casos pra sempre devolver um array.
+ */
+function extractList(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'object') {
+    const keys = Object.keys(value);
+    // objeto-wrapper com uma única chave contendo o array de verdade
+    if (keys.length === 1 && Array.isArray(value[keys[0]])) {
+      return value[keys[0]];
+    }
+    // objeto único representando 1 item (API omite o array quando só há 1)
+    return [value];
+  }
+  return [];
+}
+
 function mapSku(sku) {
   return {
     skuId: sku.sku_id,
-    atributos: (sku.ae_sku_property_dtos || []).map((p) => ({
+    atributos: extractList(sku.ae_sku_property_dtos).map((p) => ({
       nome: p.sku_property_name,
       valor: p.property_value_definition_name || p.sku_property_value,
       imagem: p.sku_image || null,
@@ -84,15 +106,15 @@ function mapSku(sku) {
     moeda: sku.currency_code || null,
     estoque: sku.sku_available_stock ?? null,
     codigoBarras: sku.barcode || sku.ean_code || null,
-    faixasAtacado: (sku.wholesale_price_tiers || []).map((t) => ({
+    faixasAtacado: extractList(sku.wholesale_price_tiers).map((t) => ({
       quantidadeMin: t.begin_num,
       preco: parseFloat(t.price),
     })),
   };
 }
 
-function mapPropriedades(props = []) {
-  return props.map((p) => ({
+function mapPropriedades(props) {
+  return extractList(props).map((p) => ({
     nome: p.attr_name,
     valor: p.attr_value,
     unidade: p.attr_value_unit || null,
@@ -115,8 +137,8 @@ export function mapProductDetail(productResponse) {
   const multimedia = result.ae_multimedia_info_dto || {};
   const store = result.ae_store_info || {};
   const logistics = result.logistics_info_dto || {};
-  const skus = result.ae_item_sku_info_dtos || [];
-  const propriedades = result.ae_item_properties || [];
+  const skus = extractList(result.ae_item_sku_info_dtos);
+  const propriedades = result.ae_item_properties; // extractList aplicado dentro de mapPropriedades
 
   return {
     externalId: base.product_id,
@@ -137,7 +159,7 @@ export function mapProductDetail(productResponse) {
       .split(';')
       .map((u) => u.trim())
       .filter(Boolean),
-    videos: (multimedia.ae_video_dtos || []).map((v) => v.video_url).filter(Boolean),
+    videos: extractList(multimedia.ae_video_dtos).map((v) => v.video_url).filter(Boolean),
 
     variacoes: skus.map(mapSku),
     propriedades: mapPropriedades(propriedades),
