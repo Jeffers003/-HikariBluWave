@@ -93,12 +93,6 @@ export async function listarProdutosAliExpress(req, res) {
   try {
     const { keyword } = req.query;
 
-    if (!keyword) {
-      return res.status(400).json({
-        mensagem: "Informe uma palavra-chave",
-      });
-    }
-
     const produtos = await buscarProdutosAliExpress(keyword);
 
     res.json(produtos);
