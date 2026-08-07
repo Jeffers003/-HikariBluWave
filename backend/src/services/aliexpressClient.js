@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+
 import { obterAccessToken } from "./aliexpressService.js";
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
 
@@ -24,6 +25,8 @@ export async function chamarAliExpress(method, params = {}) {
     process.env.ALIEXPRESS_APP_SECRET,
     "/sync",
   );
+
+  console.log("REQUEST:", request);
 
   const resposta = await axios.post(BASE_URL, qs.stringify(request), {
     headers: {
