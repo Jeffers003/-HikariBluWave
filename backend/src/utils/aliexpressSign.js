@@ -1,8 +1,8 @@
 import crypto from "crypto";
 
-export function gerarAssinatura(params, secret, apiPath) {
+export function gerarAssinatura(params, secret, apiPath = "") {
   const keys = Object.keys(params)
-    .filter((key) => key !== "sign")
+    .filter((k) => k !== "sign")
     .sort();
 
   let signString = apiPath;

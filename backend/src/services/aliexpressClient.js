@@ -7,26 +7,34 @@ import { gerarAssinatura } from "../utils/aliexpressSign.js";
 const BASE_URL = "https://api-sg.aliexpress.com/sync";
 
 export async function chamarAliExpress(method, params = {}) {
-  const accessToken = await obterAccessToken();
+  const token = await obterAccessToken();
 
   const request = {
     app_key: process.env.ALIEXPRESS_APP_KEY,
-    access_token: accessToken,
+
     method,
+
+    session: token,
+
     timestamp: Date.now(),
+
     sign_method: "sha256",
+
     format: "json",
+
     v: "2.0",
+
     ...params,
   };
 
   request.sign = gerarAssinatura(
     request,
     process.env.ALIEXPRESS_APP_SECRET,
-    "/sync",
+    "",
   );
 
-  console.log("REQUEST:", request);
+  console.log("ALI REQUEST:");
+  console.log(request);
 
   const resposta = await axios.post(BASE_URL, qs.stringify(request), {
     headers: {
