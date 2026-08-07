@@ -2,36 +2,35 @@ import axios from "axios";
 import qs from "qs";
 
 import { chamarAliExpress } from "./aliexpressClient.js";
-
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
 
 const TOKEN_URL =
   "https://api-sg.aliexpress.com/rest/auth/token/security/create";
 
 export async function gerarAccessToken(code) {
-  const params = {
-    app_key: process.env.ALIEXPRESS_APP_KEY,
+  try {
+    const params = {
+      app_key: process.env.ALIEXPRESS_APP_KEY,
 
-    code,
+      code,
 
-    timestamp: Date.now(),
+      timestamp: Date.now(),
 
-    sign_method: "HMAC-SHA256",
-  };
+      sign_method: "sha256",
+    };
 
-  params.sign = gerarAssinatura(
-    params,
-    process.env.ALIEXPRESS_APP_SECRET,
-    "/auth/token/security/create",
-  );
+    params.sign = gerarAssinatura(params, process.env.ALIEXPRESS_APP_SECRET);
 
-  const resposta = await axios.post(TOKEN_URL, qs.stringify(params), {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    },
-  });
+    const resposta = await axios.post(TOKEN_URL, qs.stringify(params), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    });
 
-  return resposta.data;
+    return resposta.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
 }
 
 export async function buscarCategoriasAliExpress() {
@@ -49,6 +48,7 @@ export async function buscarProdutosAliExpress(keyword) {
 export async function buscarProdutoAliExpress(url) {
   return {
     sucesso: true,
+
     url,
   };
 }
