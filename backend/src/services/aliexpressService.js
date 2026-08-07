@@ -66,6 +66,7 @@ export async function buscarCategoriasAliExpress() {
 export async function buscarProdutosAliExpress(keyword) {
   return chamarAliExpress("aliexpress.ds.product.get", {
     keywords: keyword,
+    ship_to_country: "BR",
     page_no: 1,
     page_size: 20,
   });
