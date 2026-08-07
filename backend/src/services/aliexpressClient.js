@@ -7,6 +7,11 @@ import { gerarAssinatura } from "../utils/aliexpressSign.js";
 const BASE_URL = "https://api-sg.aliexpress.com/sync";
 
 export async function chamarAliExpress(method, params = {}) {
+  console.log("METODO ALIEXPRESS:");
+  console.log(method);
+
+  console.log("PARAMETROS:");
+  console.log(params);
   const token = await obterAccessToken();
 
   const request = {
