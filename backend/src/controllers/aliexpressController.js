@@ -5,7 +5,7 @@ import {
   buscarProdutosAliExpress,
   gerarAccessToken,
 } from "../services/aliexpressService.js";
-import AliExpressToken from "../services/aliexpressToken.js";
+import AliExpressToken from "../models/AliExpressToken.js"; // ← certo
 import {
   mapProductDetail,
   toHikariBluWaveProduct,

@@ -1,5 +1,5 @@
 // src/services/aliexpressToken.js
-import AliExpressToken from "./aliexpressToken.js";
+import AliExpressToken from "../models/AliExpressToken.js";
 
 export async function obterAccessToken() {
   const token = await AliExpressToken.findOne();
