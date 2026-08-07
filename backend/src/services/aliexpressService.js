@@ -25,7 +25,14 @@ export async function gerarAccessToken(code) {
   );
   console.log("PARAMS TOKEN:");
   console.log(params);
-
+  console.log({
+    app_key: params.app_key,
+    code: params.code,
+    timestamp: params.timestamp,
+    sign_method: params.sign_method,
+    sign: params.sign,
+  });
+  console.log("SECRET LENGTH:", process.env.ALIEXPRESS_APP_SECRET.length);
   const resposta = await axios.post(
     "https://api-sg.aliexpress.com/rest/auth/token/security/create",
 
