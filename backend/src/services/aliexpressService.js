@@ -5,7 +5,7 @@ import qs from "qs";
 import { chamarAliExpress } from "./aliexpressClient.js";
 import { obterAccessToken } from "./aliexpressToken.js"; // re-exportado abaixo por compatibilidade
 import { gerarAssinatura } from "../utils/aliexpressSign.js";
-import AliExpressToken from "../models/AliExpressToken.js"; // ← certo
+import AliExpressToken from "../models/AliExpressToken.js";
 
 const TOKEN_URL =
   "https://api-sg.aliexpress.com/rest/auth/token/security/create";
@@ -80,4 +80,27 @@ export function extrairProductIdDaUrl(url) {
 export async function buscarProdutoAliExpress(url) {
   const productId = extrairProductIdDaUrl(url);
   return buscarDetalheProdutoAliExpress(productId);
+}
+
+/**
+ * Consulta o frete real (aliexpress.ds.freight.query) — diferente do
+ * ds.product.get, que só devolve prazo estimado, sem valor de envio.
+ * @param {string} productId
+ * @param {string} skuId - obrigatório, cada variação pode ter frete diferente
+ * @param {number} quantity
+ */
+export async function buscarFreteAliExpress(productId, skuId, quantity = 1) {
+  const queryDeliveryReq = {
+    productId,
+    selectedSkuId: skuId,
+    quantity,
+    shipToCountry: "BR",
+    currency: "BRL",
+    language: "pt",
+    locale: "pt_BR",
+  };
+
+  return chamarAliExpress("aliexpress.ds.freight.query", {
+    queryDeliveryReq: JSON.stringify(queryDeliveryReq),
+  });
 }
