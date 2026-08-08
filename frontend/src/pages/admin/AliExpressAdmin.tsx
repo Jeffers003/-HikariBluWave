@@ -84,7 +84,7 @@ export default function AliExpressAdmin() {
   }
 
   return (
-    <div style={estilos.container}>
+    <div className="mt-20" style={estilos.container}>
       <h1 style={estilos.titulo}>Importar produtos da AliExpress</h1>
 
       <form onSubmit={buscar} style={estilos.formBusca}>
@@ -106,11 +106,17 @@ export default function AliExpressAdmin() {
       <div style={estilos.grid}>
         {produtos.map((produto) => (
           <div key={produto.externalId} style={estilos.card}>
-            <img src={produto.imagem} alt={produto.nome} style={estilos.imagem} />
+            <img
+              src={produto.imagem}
+              alt={produto.nome}
+              style={estilos.imagem}
+            />
             <p style={estilos.nomeProduto}>{produto.nome}</p>
             <p style={estilos.preco}>
               {produto.moeda} {produto.precoComDesconto?.toFixed(2)}
-              {produto.desconto && <span style={estilos.desconto}> ({produto.desconto} off)</span>}
+              {produto.desconto && (
+                <span style={estilos.desconto}> ({produto.desconto} off)</span>
+              )}
             </p>
             <p style={estilos.meta}>
               ⭐ {produto.avaliacao ?? "-"} · {produto.pedidos180d} pedidos
@@ -137,7 +143,12 @@ const estilos: Record<string, React.CSSProperties> = {
   container: { padding: "24px", maxWidth: "1100px", margin: "0 auto" },
   titulo: { fontSize: "22px", marginBottom: "16px" },
   formBusca: { display: "flex", gap: "8px", marginBottom: "24px" },
-  input: { flex: 1, padding: "10px 12px", borderRadius: "6px", border: "1px solid #ccc" },
+  input: {
+    flex: 1,
+    padding: "10px 12px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+  },
   botaoBuscar: {
     padding: "10px 20px",
     borderRadius: "6px",
@@ -161,7 +172,12 @@ const estilos: Record<string, React.CSSProperties> = {
     flexDirection: "column",
     gap: "6px",
   },
-  imagem: { width: "100%", height: "160px", objectFit: "cover", borderRadius: "6px" },
+  imagem: {
+    width: "100%",
+    height: "160px",
+    objectFit: "cover",
+    borderRadius: "6px",
+  },
   nomeProduto: {
     fontSize: "13px",
     lineHeight: "1.3",
