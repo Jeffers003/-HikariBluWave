@@ -6,7 +6,7 @@
 // Ajuste API_URL pra apontar pro seu backend, ou troque pelo client
 // http central do projeto se vocês já tiverem um (axios, etc).
 
-import { useState, FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 const API_URL = "https://hikaribluwave.onrender.com";
 
