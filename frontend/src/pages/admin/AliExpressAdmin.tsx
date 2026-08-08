@@ -140,7 +140,7 @@ export default function AliExpressAdmin() {
 }
 
 const estilos: Record<string, React.CSSProperties> = {
-  container: { padding: "24px", maxWidth: "1100px", margin: "0 auto" },
+  container: { padding: "24px", maxWidth: "1100px", margin: "20 auto" },
   titulo: { fontSize: "22px", marginBottom: "16px" },
   formBusca: { display: "flex", gap: "8px", marginBottom: "24px" },
   input: {
