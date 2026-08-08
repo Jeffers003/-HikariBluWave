@@ -45,6 +45,11 @@ export function Header() {
           <li>
             <Link to="/contato">CONTATO</Link>
           </li>
+          {usuario?.cargo === "admin" && (
+            <li>
+              <Link to="/admin/dashboard">PAINEL ADMIN</Link>
+            </li>
+          )}
         </ul>
       </nav>{" "}
       {/* NAVBAR */}

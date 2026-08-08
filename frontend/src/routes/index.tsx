@@ -31,7 +31,7 @@ import NovaColecao from "@/pages/admin/colecoes/NovaColecao";
 import Reviews from "@/pages/admin/reviews/Reviews";
 import NovoReview from "@/pages/admin/reviews/NovoReview";
 import EditarReview from "@/pages/admin/reviews/EditarReview";
-
+import AliExpressAdmin from "../pages/admin/AliExpressAdmin";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -131,6 +131,10 @@ export const router = createBrowserRouter([
       {
         path: "reviews/:id",
         Component: EditarReview,
+      },
+      {
+        path: "aliexpress",
+        Component: AliExpressAdmin,
       },
 
       // =====================
