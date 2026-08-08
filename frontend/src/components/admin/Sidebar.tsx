@@ -29,8 +29,8 @@ const links = [
     icone: Flame,
   },
   {
-    nome: "AliExpressAdmin",
-    rota: "/admin/aliexpressadmin",
+    nome: "AliExpress",
+    rota: "/admin/aliexpress",
     icone: Flame,
   },
   {
