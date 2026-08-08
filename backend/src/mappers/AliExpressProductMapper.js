@@ -28,19 +28,15 @@ export function mapSearchResultToPreview(rawItem) {
   // pedidos no request (ex: BRL). salePrice/originalPrice vêm em CNY (preço
   // "doméstico" chinês) e NÃO devem ser usados pra exibir ao cliente final.
   return {
-    externalId: rawItem.itemId, // usar depois em ds.product.get
-    fornecedor: "aliexpress",
+    externalId: rawItem.itemId,                 // usar depois em ds.product.get
+    fornecedor: 'aliexpress',
     nome: rawItem.title,
     imagem: rawItem.itemMainPic,
-    precoOriginal:
-      parseFloat(rawItem.targetOriginalPrice ?? rawItem.originalPrice) || null,
-    precoComDesconto:
-      parseFloat(rawItem.targetSalePrice ?? rawItem.salePrice) || null,
-    moeda:
-      rawItem.targetOriginalPriceCurrency || rawItem.salePriceCurrency || "USD",
+    precoOriginal: parseFloat(rawItem.targetOriginalPrice ?? rawItem.originalPrice) || null,
+    precoComDesconto: parseFloat(rawItem.targetSalePrice ?? rawItem.salePrice) || null,
+    moeda: rawItem.targetOriginalPriceCurrency || rawItem.salePriceCurrency || 'USD',
     desconto: rawItem.discount || null,
-    pedidos180d:
-      parseInt(String(rawItem.orders || "0").replace(/[^\d]/g, ""), 10) || 0,
+    pedidos180d: parseInt(String(rawItem.orders || '0').replace(/[^\d]/g, ''), 10) || 0,
     avaliacao: parseFloat(rawItem.score) || null,
     categoriaIdExterna: rawItem.cateId || null,
     urlOriginal: rawItem.itemUrl ? `https:${rawItem.itemUrl}` : null,
@@ -52,9 +48,8 @@ export function mapSearchResultToPreview(rawItem) {
  * @param {object} searchResponse - resposta completa de aliexpress.ds.text.search
  */
 export function mapSearchResponse(searchResponse) {
-  const data =
-    searchResponse?.aliexpress_ds_text_search_response?.data ??
-    searchResponse?.data; // depende de como o chamarAliExpress() desembrulha
+  const data = searchResponse?.aliexpress_ds_text_search_response?.data
+    ?? searchResponse?.data; // depende de como o chamarAliExpress() desembrulha
 
   // A API aninha a lista em products.selection_search_product, não em products direto
   const lista = data?.products?.selection_search_product;
@@ -86,7 +81,7 @@ export function mapSearchResponse(searchResponse) {
 function extractList(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
-  if (typeof value === "object") {
+  if (typeof value === 'object') {
     const keys = Object.keys(value);
     // objeto-wrapper com uma única chave contendo o array de verdade
     if (keys.length === 1 && Array.isArray(value[keys[0]])) {
@@ -135,9 +130,7 @@ export function mapProductDetail(productResponse) {
     productResponse?.result;
 
   if (!result) {
-    throw new Error(
-      'Resposta da AliExpress sem "result" — produto não encontrado ou token inválido.',
-    );
+    throw new Error('Resposta da AliExpress sem "result" — produto não encontrado ou token inválido.');
   }
 
   const base = result.ae_item_base_info_dto || {};
@@ -149,10 +142,10 @@ export function mapProductDetail(productResponse) {
 
   return {
     externalId: base.product_id,
-    fornecedor: "aliexpress",
+    fornecedor: 'aliexpress',
 
     nome: base.subject,
-    descricaoHtml: base.detail || base.mobile_detail || "",
+    descricaoHtml: base.detail || base.mobile_detail || '',
 
     categoriaIdExterna: base.category_id,
     status: base.product_status_type,
@@ -162,13 +155,11 @@ export function mapProductDetail(productResponse) {
     avaliacaoMedia: base.avg_evaluation_rating ?? null,
     totalAvaliacoes: base.evaluation_count ?? null,
 
-    imagens: (multimedia.image_urls || "")
-      .split(";")
+    imagens: (multimedia.image_urls || '')
+      .split(';')
       .map((u) => u.trim())
       .filter(Boolean),
-    videos: extractList(multimedia.ae_video_dtos)
-      .map((v) => v.video_url)
-      .filter(Boolean),
+    videos: extractList(multimedia.ae_video_dtos).map((v) => v.video_url).filter(Boolean),
 
     variacoes: skus.map(mapSku),
     propriedades: mapPropriedades(propriedades),
@@ -212,6 +203,9 @@ export function toHikariBluWaveProduct(detalhe, categoriaLocalId = null) {
 
   // Preço: se não tiver preço com desconto, cai pro preço cheio da 1ª SKU.
   const preco = primeiroSku?.precoComDesconto ?? primeiroSku?.preco ?? null;
+  // Preço "riscado" — só faz sentido mostrar se for maior que o preço atual
+  const precoAntigo =
+    primeiroSku?.preco && primeiroSku.preco > preco ? primeiroSku.preco : undefined;
 
   // Estoque: soma o estoque de todas as variações (ou 0 se vier null/undefined).
   const estoqueTotal = (detalhe.variacoes || []).reduce(
@@ -223,10 +217,16 @@ export function toHikariBluWaveProduct(detalhe, categoriaLocalId = null) {
     nome: detalhe.nome,
     descricao: detalhe.descricaoHtml,
     preco,
+    precoAntigo,
     categoria: categoriaLocalId,
     imagem: imagemCapa,
     estoque: estoqueTotal,
-    ativo: detalhe.status === "onSelling" || detalhe.status === "ACTIVE",
+    ativo: detalhe.status === 'onSelling' || detalhe.status === 'ACTIVE',
+    marketplace: 'aliexpress',
+    destaque: false,
+    avaliacao: detalhe.avaliacaoMedia ?? undefined,
+    vendas: detalhe.vendasTotais ?? undefined,
+    linkAfiliado: `https://www.aliexpress.com/item/${detalhe.externalId}.html`,
     productIdExterno: detalhe.externalId,
   };
 }

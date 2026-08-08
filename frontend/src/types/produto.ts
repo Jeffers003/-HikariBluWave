@@ -1,23 +1,18 @@
+// src/types/produto.ts
 export interface Produto {
   _id: string;
-
   titulo: string;
-
   slug: string;
-
   imagem: string;
-
-  marketplace: string;
-
   preco: number;
-
   precoAntigo?: number;
-
-  avaliacao?: number;
-
-  vendas?: number;
-
-  linkAfiliado: string;
-
+  marketplace: string;
   destaque?: boolean;
+  avaliacao?: number;
+  vendas?: number;
+  linkAfiliado?: string;
+  categoria?: {
+    _id: string;
+    nome: string;
+  } | null;
 }

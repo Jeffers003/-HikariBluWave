@@ -8,6 +8,14 @@ const produtoSchema = new mongoose.Schema(
       trim: true,
     },
 
+    // slug é gerado automaticamente a partir do nome (ver hook abaixo),
+    // usado nas rotas públicas tipo /produtos/:slug
+    slug: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
     descricao: {
       type: String,
       required: true,
@@ -16,6 +24,11 @@ const produtoSchema = new mongoose.Schema(
     preco: {
       type: Number,
       required: true,
+    },
+
+    // preço "riscado" pra mostrar desconto no card (opcional)
+    precoAntigo: {
+      type: Number,
     },
 
     categoria: {
@@ -38,10 +51,33 @@ const produtoSchema = new mongoose.Schema(
       default: true,
     },
 
-    // NOVO: guarda o product_id da AliExpress quando o produto foi
-    // importado por lá. Fica vazio/undefined pra produtos cadastrados
-    // manualmente. "sparse: true" faz o índice único ignorar documentos
-    // sem esse campo, em vez de dar erro de duplicata em todos eles.
+    // usado pelo card pra mostrar o selo (ex: "AliExpress"). Produtos
+    // cadastrados manualmente podem deixar em branco.
+    marketplace: {
+      type: String,
+      default: "proprio",
+    },
+
+    destaque: {
+      type: Boolean,
+      default: false,
+    },
+
+    avaliacao: {
+      type: Number,
+    },
+
+    vendas: {
+      type: Number,
+    },
+
+    // link externo (afiliado), quando aplicável — em produtos de
+    // dropshipping próprio isso normalmente fica vazio, já que o cliente
+    // compra dentro do próprio site.
+    linkAfiliado: {
+      type: String,
+    },
+
     productIdExterno: {
       type: String,
       unique: true,
@@ -52,5 +88,36 @@ const produtoSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+function gerarSlugBase(nome) {
+  return nome
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove acentos
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+produtoSchema.pre("save", async function (next) {
+  if (this.slug && !this.isModified("nome")) {
+    return next();
+  }
+
+  const base = gerarSlugBase(this.nome);
+  let slugCandidato = base;
+  let contador = 1;
+
+  // garante unicidade caso já exista produto com o mesmo nome
+  const Produto = this.constructor;
+  while (
+    await Produto.exists({ slug: slugCandidato, _id: { $ne: this._id } })
+  ) {
+    contador += 1;
+    slugCandidato = `${base}-${contador}`;
+  }
+
+  this.slug = slugCandidato;
+  next();
+});
 
 export default mongoose.model("Produto", produtoSchema);
