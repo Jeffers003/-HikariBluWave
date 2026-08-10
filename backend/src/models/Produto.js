@@ -98,9 +98,9 @@ function gerarSlugBase(nome) {
     .replace(/(^-|-$)/g, "");
 }
 
-produtoSchema.pre("save", async function (next) {
+produtoSchema.pre("save", async function () {
   if (this.slug && !this.isModified("nome")) {
-    return next();
+    return;
   }
 
   const base = gerarSlugBase(this.nome);
@@ -117,7 +117,6 @@ produtoSchema.pre("save", async function (next) {
   }
 
   this.slug = slugCandidato;
-  next();
 });
 
 export default mongoose.model("Produto", produtoSchema);
