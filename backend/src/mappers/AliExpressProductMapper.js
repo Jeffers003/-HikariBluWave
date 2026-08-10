@@ -151,9 +151,15 @@ export function mapProductDetail(productResponse) {
     status: base.product_status_type,
 
     moeda: base.currency_code,
-    vendasTotais: base.sales_count ?? null,
-    avaliacaoMedia: base.avg_evaluation_rating ?? null,
-    totalAvaliacoes: base.evaluation_count ?? null,
+    vendasTotais: base.sales_count != null
+      ? parseInt(String(base.sales_count).replace(/[^\d]/g, ''), 10) || null
+      : null,
+    avaliacaoMedia: base.avg_evaluation_rating != null
+      ? parseFloat(base.avg_evaluation_rating) || null
+      : null,
+    totalAvaliacoes: base.evaluation_count != null
+      ? parseInt(String(base.evaluation_count).replace(/[^\d]/g, ''), 10) || null
+      : null,
 
     imagens: (multimedia.image_urls || '')
       .split(';')
