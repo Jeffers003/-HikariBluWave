@@ -8,6 +8,8 @@ import {
   Flame,
   Boxes,
   MessagesSquare,
+  LogOut,
+  Handbag,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -19,6 +21,11 @@ const links = [
     icone: LayoutDashboard,
   },
   {
+    nome: "AliExpress",
+    rota: "/admin/aliexpress",
+    icone: Handbag,
+  },
+  {
     nome: "Produtos",
     rota: "/admin/produtos",
     icone: Package,
@@ -28,11 +35,7 @@ const links = [
     rota: "/admin/achadinhos",
     icone: Flame,
   },
-  {
-    nome: "AliExpress",
-    rota: "/admin/aliexpress",
-    icone: Flame,
-  },
+
   {
     nome: "Categorias",
     rota: "/admin/categorias",
@@ -115,8 +118,9 @@ export default function Sidebar() {
         })}
       </nav>
       <div className="mt-auto border-t border-[#046AEE]/20 p-4">
-        <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-red-400 transition hover:bg-red-500/10 hover:text-red-300">
-          🚪 Sair
+        <button className="flex items-center gap-2 rounded-lg bg-red-500/10 px-4 py-2 text-red-400 transition hover:bg-red-500/20">
+          <LogOut size={18} />
+          Voltar
         </button>
       </div>
     </aside>

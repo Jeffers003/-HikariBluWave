@@ -22,7 +22,7 @@ export default function TableActions({
   showDelete = true,
 }: TableActionsProps) {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex h-20 overflow-y-auto items-center justify-center gap-2">
       {showEdit && (
         <Button size="icon" onClick={onEdit}>
           <Pencil className="h-4 w-4" />

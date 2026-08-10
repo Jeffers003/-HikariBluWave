@@ -3,11 +3,12 @@ import SectionHeader from "@/components/shared/SectionHeader";
 
 import ProductGrid from "@/components/products/ProductGrid";
 
-import { produtosMock } from "@/data/produtos";
+import { useProdutos } from "@/hooks/useProdutos";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function FeaturedProducts() {
+  const { produtos } = useProdutos();
   return (
     <SectionContainer>
       <div className="flex  items-center gap-4 text-center justify-between ">
@@ -41,7 +42,7 @@ export default function FeaturedProducts() {
       </div>
 
       <div className="mt-5">
-        <ProductGrid products={produtosMock} />
+        <ProductGrid products={produtos.slice(0, 4)} />
       </div>
     </SectionContainer>
   );

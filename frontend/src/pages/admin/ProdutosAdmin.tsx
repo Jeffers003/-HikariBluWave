@@ -78,7 +78,7 @@ export default function ProdutosAdmin() {
             </TableRow>
           </TableHeader>
 
-          <TableBody>
+          <TableBody className="">
             {produtos.map((produto) => (
               <TableRow key={produto._id}>
                 <TableCell>

@@ -51,10 +51,11 @@ export default function ProdutoDetalhes() {
   }
 
   return (
-    <div className="pt-10 bg-[#010308] min-h-screen">
+    <div className="pt-10   bg-[#010308] min-h-screen">
       <div
         className="
         max-w-6xl
+        
         mx-auto
         px-6
         py-16

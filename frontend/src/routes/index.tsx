@@ -32,6 +32,7 @@ import Reviews from "@/pages/admin/reviews/Reviews";
 import NovoReview from "@/pages/admin/reviews/NovoReview";
 import EditarReview from "@/pages/admin/reviews/EditarReview";
 import AliExpressAdmin from "../pages/admin/AliExpressAdmin";
+import CategoriaDetalhes from "../pages/CategoriaDetalhes";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -65,7 +66,10 @@ export const router = createBrowserRouter([
         path: "categorias",
         Component: Categorias,
       },
-
+      {
+        path: "categorias/:slug",
+        Component: CategoriaDetalhes,
+      },
       {
         path: "contato",
         Component: Contato,

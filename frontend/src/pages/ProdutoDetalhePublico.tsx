@@ -18,7 +18,7 @@ export default function ProdutoDetalhePublico() {
   }
 
   return (
-    <div className="min-h-screen bg-[#010308] px-6 py-16">
+    <div className="min-h-screen mt-20 bg-[#010308] px-6 py-16">
       <PriceNotice />
       <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2">
         <img
