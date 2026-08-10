@@ -3,12 +3,15 @@ import {
   buscarProdutoAliExpress,
   buscarCategoriasAliExpress,
   buscarProdutosAliExpress,
+  buscarFreteAliExpress,
   gerarAccessToken,
 } from "../services/aliexpressService.js";
 import AliExpressToken from "../models/AliExpressToken.js";
 import {
   mapProductDetail,
   toHikariBluWaveProduct,
+  mapFreightResponse,
+  mapSearchResponse,
 } from "../mappers/AliExpressProductMapper.js"; // ajuste o caminho se salvou em outro lugar
 import ProdutoModel from "../models/Produto.js"; // ajuste pro nome/caminho real do seu model
 
@@ -114,12 +117,38 @@ export async function listarProdutosAliExpress(req, res) {
   try {
     const { keyword } = req.query;
 
-    const produtos = await buscarProdutosAliExpress(keyword);
+    const raw = await buscarProdutosAliExpress(keyword);
+    const resultado = mapSearchResponse(raw);
 
-    res.json(produtos);
+    res.json(resultado);
   } catch (error) {
     res.status(500).json({
       erro: error.message,
+    });
+  }
+}
+
+/**
+ * GET /aliexpress/frete?productId=123&skuId=456&quantity=1
+ */
+export async function consultarFreteAliExpress(req, res) {
+  try {
+    const { productId, skuId, quantity = 1 } = req.query;
+
+    if (!productId || !skuId) {
+      return res.status(400).json({
+        erro: "productId e skuId são obrigatórios.",
+      });
+    }
+
+    const raw = await buscarFreteAliExpress(productId, skuId, Number(quantity));
+    const opcoes = mapFreightResponse(raw);
+
+    res.json({ sucesso: true, opcoes });
+  } catch (error) {
+    console.error("[aliexpress] erro ao consultar frete:", error?.response?.data || error.message);
+    res.status(500).json({
+      erro: error?.response?.data || error.message,
     });
   }
 }

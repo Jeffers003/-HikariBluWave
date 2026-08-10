@@ -3,7 +3,14 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 // LISTAR
 export const listarAchadinhos = asyncHandler(async (req, res) => {
-  const achadinhos = await Achadinho.find()
+  const { categoria } = req.query;
+
+  const filtro = {};
+  if (categoria) {
+    filtro.categoria = categoria;
+  }
+
+  const achadinhos = await Achadinho.find(filtro)
     .populate("categoria", "nome")
     .sort({ createdAt: -1 });
 
@@ -84,10 +91,6 @@ export const atualizarAchadinho = asyncHandler(async (req, res) => {
 
   if (req.body.colecoes) {
     dados.colecoes = JSON.parse(req.body.colecoes);
-  }
-
-  if (req.file) {
-    dados.imagem = `/uploads/${req.file.filename}`;
   }
 
   if (req.file) {
